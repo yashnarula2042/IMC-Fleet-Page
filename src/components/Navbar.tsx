@@ -1,0 +1,141 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+
+const NAV_LINKS = [
+  { id: '1', title: 'Collection', num: '01', href: '#collection', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80' },
+  { id: '2', title: 'Heritage', num: '02', href: '#about', img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80' },
+  { id: '3', title: 'Reach', num: '03', href: '#how-it-works', img: 'https://images.unsplash.com/photo-1520031444763-b11b7749a2a5?auto=format&fit=crop&w=1920&q=80' },
+  { id: '4', title: 'Inquire', num: '04', href: '#reserve', img: 'https://images.unsplash.com/photo-1563720223185-11003d32c946?auto=format&fit=crop&w=1920&q=80' }
+];
+
+export default function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activePreview, setActivePreview] = useState('1');
+  const [isScrolled, setIsScrolled] = useState(false);
+  
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const leftPaneRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(overlayRef.current, { x: '100%', visibility: 'hidden' });
+      gsap.set('.nav-link-text', { y: '110%' });
+      gsap.set('.nav-link-num', { opacity: 0, y: -20 });
+      
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power4.inOut" } });
+      tl.to(overlayRef.current, { x: '0%', visibility: 'visible', duration: 1 })
+        .from(leftPaneRef.current, { x: -50, opacity: 0, duration: 1 }, "-=0.6")
+        .to('.nav-link-text', { y: '0%', duration: 1, stagger: 0.05 }, "-=0.8")
+        .to('.nav-link-num', { opacity: 0.5, y: 0, duration: 1, stagger: 0.05 }, "-=0.8");
+        
+      tlRef.current = tl;
+    });
+    return () => ctx.revert();
+  }, []);
+
+  const toggleMenu = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+      tlRef.current?.play();
+    } else {
+      setIsOpen(false);
+      tlRef.current?.reverse();
+    }
+  };
+
+  return (
+    <>
+      <nav className={`fixed top-0 w-full px-6 md:px-12 z-[2000] flex justify-between items-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isScrolled ? 'py-5 bg-white/95 backdrop-blur-xl border-b border-[#E5E7EB] text-[#111111]' : 'py-[30px] text-white'}`}>
+        <a href="#" className={`font-headline font-medium tracking-[0.25em] uppercase text-sm transition-all duration-400 hover:text-[#3A5A7A] hover:scale-105 ${isOpen ? 'text-white' : ''}`}>
+          Indian Motor Club
+        </a>
+        <div 
+          onClick={toggleMenu}
+          className="flex items-center gap-4 cursor-pointer group z-[2000]"
+        >
+          <span className={`text-[10px] tracking-[0.3em] font-medium transition-all duration-500 ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
+            CLOSE
+          </span>
+          <div className={`relative w-[30px] h-[12px] flex flex-col justify-between items-end ${isOpen ? 'open' : ''}`}>
+            <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full translate-y-[5.5px] rotate-45 bg-white' : 'w-full bg-current'}`}></div>
+            <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full -translate-y-[5.5px] -rotate-45 bg-white' : 'w-[60%] bg-current'}`}></div>
+          </div>
+        </div>
+      </nav>
+
+      {/* OVERLAY */}
+      <div 
+        ref={overlayRef}
+        className="fixed inset-0 bg-[#0a0a0a]/98 backdrop-blur-3xl z-[1000] flex items-center justify-center overflow-hidden invisible"
+      >
+        <div className="absolute inset-0 z-[-1] opacity-15 overflow-hidden transition-opacity duration-800 pointer-events-none">
+          {NAV_LINKS.map((link) => (
+            <img 
+              key={link.id}
+              src={link.img} 
+              alt={link.title}
+              className={`absolute inset-0 w-full h-full object-cover grayscale brightness-75 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${activePreview === link.id ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
+            />
+          ))}
+        </div>
+
+        <div className="w-full max-w-[1400px] h-full md:h-auto px-6 md:px-12 py-24 md:py-10 flex flex-col md:flex-row items-stretch">
+          
+          <div ref={leftPaneRef} className="w-full md:w-[40%] flex flex-col justify-end pb-6 md:pb-10 border-t md:border-t-0 border-r-0 md:border-r border-white/10 mt-6 md:mt-0 pt-6 md:pt-0 order-2 md:order-1">
+            <div className="font-headline text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/30 mb-3 md:mb-5 font-medium">Service Reach</div>
+            <div className="font-headline text-[11px] md:text-[13px] tracking-[0.15em] uppercase text-white/80 leading-relaxed md:leading-[2.2] mb-8 md:mb-16 font-medium">
+              MUMBAI | DELHI | BENGALURU<br />
+              HYDERABAD | LUCKNOW
+            </div>
+            <div className="font-sans text-[10px] md:text-xs text-white/50 leading-relaxed font-medium">
+              PRIVATE CLUB INQUIRIES<br />
+              concierge@indianmotorclub.com<br />
+              +91 999 000 1234
+            </div>
+          </div>
+
+          <div className="w-full md:w-[60%] flex flex-col justify-center md:pl-[100px] h-auto order-1 md:order-2">
+            <ul className="list-none m-0 p-0">
+              {NAV_LINKS.map(link => (
+                <li key={link.id} className="mb-4 md:mb-6 overflow-hidden h-auto">
+                  <a 
+                    href={link.href}
+                    onMouseEnter={() => setActivePreview(link.id)}
+                    onClick={(e) => {
+                      if (link.title === 'Inquire') {
+                        e.preventDefault();
+                        onOpenModal();
+                      }
+                      toggleMenu();
+                    }}
+                    className="group relative flex items-baseline font-headline text-[10vw] md:text-[5vw] leading-[1.1] text-white no-underline opacity-40 hover:opacity-100 md:hover:pl-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] font-medium"
+                  >
+                    <small className="nav-link-num font-sans text-xs tracking-[0.2em] md:mr-10 mr-4 opacity-50 transition-all duration-600 group-hover:opacity-100 group-hover:-translate-y-[10px] group-hover:text-[#3A5A7A] font-medium">
+                      {link.num}
+                    </small>
+                    <div className="overflow-hidden inline-block py-1">
+                      <span className="nav-link-text inline-block transition-transform duration-700">
+                        {link.title}
+                      </span>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tertiary-fixed: #dbe1ff;
+  --color-surface-tint: #735c00;
+  --color-surface-container-low: #f4f3f1;
+  --color-on-secondary-fixed: #1a1c1e;
+  --color-surface-container: #efeeeb;
+  --color-on-primary: #ffffff;
+  --color-inverse-primary: #e9c349;
+  --color-on-secondary-container: #636467;
+  --color-secondary-container: #e2e2e5;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-background: #faf9f6;
+  --color-on-primary-container: #554300;
+  --color-on-secondary: #ffffff;
+  --color-on-background: #1a1c1a;
+  --color-primary-fixed: #ffe088;
+  --color-on-tertiary-fixed: #00174b;
+  --color-tertiary-container: #97b0ff;
+  --color-surface-bright: #faf9f6;
+  --color-tertiary-fixed-dim: #b4c5ff;
+  --color-on-secondary-fixed-variant: #454749;
+  --color-on-primary-fixed: #241a00;
+  --color-outline-variant: #d0c5af;
+  --color-surface-container-high: #e9e8e5;
+  --color-primary-container: #d4af37;
+  --color-on-primary-fixed-variant: #574500;
+  --color-secondary: #5d5e61;
+  --color-surface-variant: #e3e2e0;
+  --color-outline: #7f7663;
+  --color-primary-fixed-dim: #e9c349;
+  --color-on-tertiary-fixed-variant: #27438a;
+  --color-surface-dim: #dbdad7;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-tertiary: #ffffff;
+  --color-on-surface-variant: #4d4635;
+  --color-tertiary: #415ba4;
+  --color-on-error-container: #93000a;
+  --color-secondary-fixed: #e2e2e5;
+  --color-on-surface: #1a1c1a;
+  --color-primary: #735c00;
+  --color-surface: #faf9f6;
+  --color-inverse-on-surface: #f2f1ee;
+  --color-secondary-fixed-dim: #c6c6c9;
+  --color-on-tertiary-container: #254188;
+  --color-error: #ba1a1a;
+  --color-surface-container-highest: #e3e2e0;
+  --color-inverse-surface: #2f312f;
+
+  --font-headline: var(--font-jost), sans-serif;
+  --font-body: var(--font-jost), sans-serif;
+  --font-label: var(--font-jost), sans-serif;
+  --font-sans: var(--font-jost), sans-serif;
+  --font-serif: var(--font-cormorant), serif;
+
+  --radius-DEFAULT: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+  --radius-full: 9999px;
+
+  --color-brand-champagne-start: #3A5A7A;
+  --color-brand-champagne-end: #4A6A8A;
+}
+
+@utility material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+@utility champagne-gradient {
+  background: linear-gradient(45deg, var(--color-brand-champagne-start) 0%, var(--color-brand-champagne-end) 100%);
+}
+
+@utility hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility carousel-3d-container {
+  perspective: 2500px;
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+@utility carousel-3d {
+  position: relative;
+  width: 320px;
+  height: 180px;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@utility carousel-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  backface-visibility: hidden;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+
+  &:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 20px 40px rgba(115, 92, 0, 0.05);
+  }
+
+  &.active {
+    border-color: #d4af37;
+    background: white;
+    box-shadow: 0 40px 80px rgba(115, 92, 0, 0.12);
+    transform: scale(1.05) !important;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    width: 70%;
+    height: 15px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0) 70%);
+    transform: rotateX(90deg);
+    opacity: 0.3;
+    transition: opacity 0.6s ease;
+  }
+
+  &.active::after {
+    opacity: 0.6;
+  }
+}
+
+html {
+  @apply bg-surface font-body text-on-surface;
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
