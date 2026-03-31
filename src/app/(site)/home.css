@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Manrope:wght@200;300;400;500&display=swap');
+
+.new-home-page {
+  --color-bg: #000000;
+  --color-text: #FFFFFF;
+  --color-accent: #d4af37;
+  
+  --font-display: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* background-color: var(--color-bg); Removed -> solid background hides z-index -1 video */
+  color: var(--color-text);
+  font-family: var(--font-body);
+  /* overflow-x: hidden; removed to restore position: sticky functionality for cards */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Intro Loader */
+.new-home-page #intro-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #050505;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-home-page #intro-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Video Background */
+.new-home-page .video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.new-home-page #bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7; /* Slightly dim the video for better text readability */
+}
+
+.new-home-page .video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  mix-blend-mode: multiply;
+}
+
+/* Removed conflicting .nav properties from home.css since using Global Navbar */
+
+
+.new-home-page .close-text {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(1rem);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.new-home-page .hamburger:hover .close-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.new-home-page .hamburger-lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 30px;
+  height: 12px;
+  position: relative;
+}
+
+.new-home-page .hamburger .line {
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.new-home-page .hamburger .line:nth-child(2) {
+  width: 60%;
+}
+
+/* .hamburger.active .close-text — inherits default hover behaviour */
+
+.new-home-page .hamburger.active .line:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.new-home-page .hamburger.active .line:nth-child(2) {
+  width: 100%;
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* Removed custom menu overlay CSS as switching to global navigation */
+
+/* Scroll Content Sections */
+.new-home-page #smooth-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+.new-home-page .segment {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 5vw;
+  position: relative;
+  /* Add large vertical spacing as requested */
+  margin-bottom: 100vh; 
+}
+
+/* Remove margin from last segment to avoid extra scroll space before footer */
+.new-home-page .segment:last-of-type {
+  margin-bottom: 0;
+  min-height: 80vh; /* Slightly shorter to flow into footer */
+}
+
+/* Layout Placements */
+.new-home-page .content-center {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.new-home-page .content-left {
+  width: 100%;
+  max-width: 500px;
+  margin-right: auto;
+}
+
+.new-home-page .content-right {
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  text-align: right;
+}
+
+/* Typography Styles */
+.new-home-page .heading-main {
+  font-family: var(--font-display);
+  font-weight: 200;
+  font-size: clamp(2rem, 8vw, 4rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+.new-home-page .subheading {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 2;
+  max-width: 600px;
+}
+
+.new-home-page .heading-secondary {
+  font-family: var(--font-display);
+  font-weight: 200;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+}
+
+.new-home-page .heading-bold {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+.new-home-page .body-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 2;
+  max-width: 560px;
+}
+
+/* CTA Button */
+.new-home-page .cta-button {
+  display: inline-block;
+  margin-top: 3rem;
+  padding: 1.5rem 3rem;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.new-home-page .cta-button:hover {
+  background-color: var(--color-text);
+}
+
+/* Glass CTA variant — used in Uncompromising Standards section */
+.new-home-page .cta-button--glass {
+  background-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--color-text);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.08), inset 0 0 12px rgba(255, 255, 255, 0.03);
+  transition: background-color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, letter-spacing 0.45s ease;
+}
+
+.new-home-page .cta-button--glass:hover {
+  background-color: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.9);
+  box-shadow: 0 0 32px rgba(212, 175, 55, 0.2), inset 0 0 16px rgba(212, 175, 55, 0.06);
+  letter-spacing: 0.25em;
+  color: var(--color-text);
+}
+
+/* Removed custom footer CSS to use global app footer */
+
+/* Initial states for GSAP animations */
+.new-home-page .segment h1, 
+.new-home-page .segment h2, 
+.new-home-page .segment p, 
+.new-home-page .segment a {
+  opacity: 0;
+  transform: translateY(30px);
+}

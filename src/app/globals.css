@@ -50,10 +50,10 @@
   --color-inverse-surface: #2f312f;
 
   --font-headline: var(--font-jost), sans-serif;
-  --font-body: var(--font-jost), sans-serif;
-  --font-label: var(--font-jost), sans-serif;
-  --font-sans: var(--font-jost), sans-serif;
-  --font-serif: var(--font-cormorant), serif;
+  --font-body: var(--font-sf-pro), sans-serif;
+  --font-label: var(--font-sf-pro), sans-serif;
+  --font-sans: var(--font-sf-pro), sans-serif;
+  --font-serif: var(--font-jost), serif;
 
   --radius-DEFAULT: 0rem;
   --radius-lg: 0rem;
