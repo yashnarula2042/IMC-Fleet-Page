@@ -130,7 +130,7 @@ if (videoEl) {
       // Content Segment Animations
       const segments = document.querySelectorAll('.segment');
       segments.forEach((segment, index) => {
-        const elements = segment.querySelectorAll('.heading-main, .heading-secondary, .heading-bold, .subheading, .body-text, .cta-button');
+        const elements = segment.querySelectorAll('.heading-main, .heading-secondary, .heading-bold, .subheading, .body-text, .cta-button, .cta-button--glass');
         if (!elements.length) return;
 
         let animProps = {
@@ -206,6 +206,20 @@ if (videoEl) {
               <div className="content-center">
                 <h1 className="heading-main">INDIAN MOTOR CLUB</h1>
                 <p className="subheading">A signature collection of the world&apos;s most evocative automobiles.</p>
+                <div className="flex flex-row gap-4 md:gap-6 mt-10">
+                  <button 
+                    onClick={() => setIsModalOpen(true)}
+                    className="cta-button--glass px-8 py-3.5 text-[10px] tracking-[0.3em] font-medium uppercase transition-all duration-300 hover:bg-[#d4af37]/10 active:scale-95 whitespace-nowrap"
+                  >
+                    BOOK NOW
+                  </button>
+                  <a 
+                    href="/fleet" 
+                    className="cta-button--glass px-8 py-3.5 text-[10px] tracking-[0.3em] font-medium uppercase transition-all duration-300 hover:bg-[#d4af37]/10 active:scale-95 whitespace-nowrap"
+                  >
+                    EXPLORE FLEET
+                  </a>
+                </div>
               </div>
             </section>
 
