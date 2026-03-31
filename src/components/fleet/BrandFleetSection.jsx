@@ -111,6 +111,16 @@ export default function BrandFleetSection({ onOpenModal }) {
 
   const gridRef = useRef(null);
   const lastWheelTime = useRef(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const itemCount = BRANDS.length;
   const angle = 360 / itemCount;
@@ -182,7 +192,7 @@ export default function BrandFleetSection({ onOpenModal }) {
     const zIndex = 10 - Math.abs(diff);
 
     // X displacement calculation to create a sweeping arc across the screen
-    const transX = diff * 340;
+    const transX = diff * (isMobile ? 120 : 340);
 
     return {
       transform: `translateX(calc(-50% + ${transX}px)) translateY(-50%) translateZ(${transZ}px) scale(${scale}) rotateY(${rotY}deg)`,
@@ -211,13 +221,34 @@ export default function BrandFleetSection({ onOpenModal }) {
         <div className="relative w-full mb-12 md:mb-20">
           <div
             className={`relative h-[240px] md:h-[400px] w-full flex items-center justify-center select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-            style={{ perspective: '1500px' }}
+            style={{ perspective: '1500px', touchAction: 'none' }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
             onWheel={handleWheel}
           >
+            {/* Carousel Navigation Buttons */}
+            <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 z-30 flex justify-between px-2 md:px-8 pointer-events-none">
+              <button
+                onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                className="pointer-events-auto h-10 w-10 md:h-14 md:w-14 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white hover:bg-[#d4af37] hover:text-black transition-all duration-300 backdrop-blur-sm"
+                aria-label="Previous Brand"
+              >
+                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                className="pointer-events-auto h-10 w-10 md:h-14 md:w-14 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white hover:bg-[#d4af37] hover:text-black transition-all duration-300 backdrop-blur-sm"
+                aria-label="Next Brand"
+              >
+                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
             <div className="relative w-full h-full flex items-center justify-center pointer-events-none" style={{ transformStyle: 'preserve-3d' }}>
               {BRANDS.map((brand, index) => {
                 const { transform, opacity, zIndex } = getTransform(index);
