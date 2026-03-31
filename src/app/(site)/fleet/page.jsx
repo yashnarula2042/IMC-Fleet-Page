@@ -5,7 +5,6 @@ import Hero from "@/components/fleet/Hero";
 import BrandFleetSection from "@/components/fleet/BrandFleetSection";
 import Spotlight from "@/components/fleet/Spotlight";
 import Occasions from "@/components/fleet/Occasions";
-import Services from "@/components/fleet/Services";
 import BookingModal from "@/components/BookingModal";
 
 export default function FleetPage() {
