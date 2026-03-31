@@ -59,14 +59,14 @@ export default function Navbar({ onOpenModal }: { onOpenModal?: () => void } = {
 
         {/* Scrolled Background Container with Grain */}
         <div
-          className={`absolute inset-0 z-[-1] transition-opacity duration-700 bg-white/95 border-b border-[#E5E7EB] ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 z-[-1] transition-opacity duration-700 bg-black/95 border-b border-[#E5E7EB] ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
         >
           {/* We reuse the global noiseFilter defined in GrainOverlay for identical texture consistency */}
           <div className="absolute inset-0 pointer-events-none opacity-[0.16]" style={{ filter: 'url(#noiseFilter)' }} />
         </div>
 
         <div className="w-full px-6 md:px-12 flex justify-between items-center mt-1">
-          <a href="/" className={`font-headline font-medium tracking-[0.25em] uppercase text-sm transition-all duration-400 hover:text-[#d4af37] active:scale-95 ${isOpen ? '!text-white' : ''}`}>
+          <a href="/" className={`font-headline font-medium tracking-[0.25em] uppercase text-sm transition-all duration-400 hover:text-[#d4af37] active:scale-95 ${isOpen ? '!text-white' : '!text-white'}`}>
             Indian Motor Club
           </a>
           <div
@@ -77,8 +77,8 @@ export default function Navbar({ onOpenModal }: { onOpenModal?: () => void } = {
               CLOSE
             </span>
             <div className={`relative w-[30px] h-[12px] flex flex-col justify-between items-end ${isOpen ? 'open' : ''}`}>
-              <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full translate-y-[5.5px] rotate-45 bg-white' : 'w-full bg-current'}`}></div>
-              <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full -translate-y-[5.5px] -rotate-45 bg-white' : 'w-[60%] bg-current'}`}></div>
+              <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full translate-y-[5.5px] rotate-45 bg-white' : 'w-full bg-white'}`}></div>
+              <div className={`h-[1px] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-full -translate-y-[5.5px] -rotate-45 bg-white' : 'w-[60%] bg-white'}`}></div>
             </div>
           </div>
         </div>

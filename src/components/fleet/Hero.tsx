@@ -2,15 +2,21 @@
 
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import BrandMarquee from './BrandMarquee';
 
 export default function Hero({ onOpenModal }: { onOpenModal: () => void }) {
   const heroRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
   const marqueeWrapperRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const ctx = gsap.context(() => {
+      // Entrance Animation
       const tl = gsap.timeline();
 
       tl.from(textRef.current, {
@@ -26,6 +32,31 @@ export default function Hero({ onOpenModal }: { onOpenModal: () => void }) {
           ease: "power3.out",
         }, "-=0.8");
 
+      // Background Image Parallax
+      gsap.to(imgRef.current, {
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+        yPercent: 20,
+        ease: "none",
+      });
+
+      // Content Layer Parallax (Subtle)
+      gsap.to(contentRef.current, {
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+        y: -50,
+        opacity: 0.8,
+        ease: "none",
+      });
+
     }, heroRef);
 
     return () => ctx.revert();
@@ -36,9 +67,10 @@ export default function Hero({ onOpenModal }: { onOpenModal: () => void }) {
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <img
+          ref={imgRef}
           src="/images/hero.jpg"
           alt="Cinematic Luxury Automotive"
-          className="w-full h-full object-cover scale-105 brightness-75 transition-transform duration-1000 grayscale-[0.2]"
+          className="w-full h-full object-cover scale-110 brightness-75 grayscale-[0.2]"
         />
         {/* Cinematic Gradient Overlays: Top-down for nav, Bottom-up for text */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
@@ -46,7 +78,7 @@ export default function Hero({ onOpenModal }: { onOpenModal: () => void }) {
         <div className="absolute inset-0 bg-black/10 mix-blend-multiply"></div>
       </div>
 
-      <div className="max-w-[1440px] w-full px-8 md:px-16 pb-20 md:pb-24 relative z-10 flex flex-col items-start translate-y-0 text-left">
+      <div ref={contentRef} className="max-w-[1440px] w-full px-8 md:px-16 pb-20 md:pb-24 relative z-10 flex flex-col items-start translate-y-0 text-left">
         <h1 ref={textRef} className="text-[14vw] md:text-[10vw] lg:text-[8vw] font-medium font-headline leading-[0.85] tracking-[-0.04em] text-white uppercase mb-8 md:mb-12">
           MEET OUR <br />
           <span className="text-white/30">FLEET</span>

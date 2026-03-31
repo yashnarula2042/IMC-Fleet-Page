@@ -24,87 +24,108 @@ export default function NewHomeContent() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Intro Animation
+      // 1. Canvas Configuration & Setup
+      const canvas = canvasRef.current;
+      const context = canvas ? canvas.getContext("2d") : null;
+      if (canvas && context) {
+        canvas.width = 1920;
+        canvas.height = 1080;
+      }
+
+      const frameOffset = 0; // Start from frame_0001
+      const frameCount = 1208;
+      const currentFrame = index => (
+        `/home/hero-frames/frame_${(index + 1 + frameOffset).toString().padStart(4, '0')}.jpg`
+      );
+
+      const images = [];
+      const imageSeq = { frame: 0 };
+
+      // Pre-load all frames
+      for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        images.push(img);
+      }
+
+      function render() {
+        if (!context || !canvas) return;
+        const img = images[imageSeq.frame];
+        if (img && img.complete) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      // Initial render of frame 1
+      if (images[0]) {
+        if (images[0].complete) render();
+        else images[0].onload = render;
+      }
+
+      // 2. Intro & Autoplay Animation
       if (lenis) lenis.stop();
 
       const playIntroOut = () => {
         if (!introLoaderRef.current || introLoaderRef.current.style.display === 'none') return;
+        
         const introTl = gsap.timeline({
           onComplete: () => {
+            // 3. ScrollTrigger Initialization (after autoplay)
+            gsap.fromTo(imageSeq, 
+              { frame: 49 },
+              {
+                frame: frameCount - 1,
+                snap: "frame",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: wrapperRef.current,
+                  start: "top top",
+                  end: "bottom bottom",
+                  scrub: 1,
+                },
+                onUpdate: render
+              }
+            );
+
             if (lenis) lenis.start();
             ScrollTrigger.refresh();
           }
         });
+
         introTl
-          .to(introLoaderRef.current, { opacity: 0, duration: 1.5, ease: 'power2.inOut' })
-          .set(introLoaderRef.current, { display: 'none' });
+          .to(introLoaderRef.current, { 
+            opacity: 0, 
+            duration: 1.5, 
+            ease: 'power2.inOut' 
+          })
+          .set(introLoaderRef.current, { display: 'none' })
+          // Autoplay first 50 frames
+          .to(imageSeq, {
+            frame: 49,
+            snap: "frame",
+            duration: 2,
+            ease: "power1.inOut",
+            onUpdate: render
+          });
       };
 
       const videoEl = document.getElementById('intro-video');
-      if (videoEl) {
-        if (videoEl.ended) {
-          playIntroOut();
-        } else {
-          videoEl.onended = playIntroOut;
-          videoEl.onerror = playIntroOut;
-          // Fallback if autoplay is blocked by the browser
-          const playPromise = videoEl.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(() => playIntroOut());
-          }
-        }
-      } else {
-        playIntroOut();
-      }
-
-      // Canvas Image Sequence Scrubbing Logic
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const context = canvas.getContext("2d");
-
-        canvas.width = 1920;
-        canvas.height = 1080;
-
-        const frameOffset = 45; // Skip initial black frames from video edit
-        const frameCount = 1208 - frameOffset;
-        const currentFrame = index => (
-          `/home/hero-frames/frame_${(index + 1 + frameOffset).toString().padStart(4, '0')}.jpg`
-        );
-
-        const images = [];
-        const imageSeq = {
-          frame: 0
-        };
-
-        for (let i = 0; i < frameCount; i++) {
-          const img = new Image();
-          img.src = currentFrame(i);
-          images.push(img);
-        }
-
-        gsap.to(imageSeq, {
-          frame: frameCount - 1,
-          snap: "frame",
-          ease: "none",
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1, // Smooth dampening
-          },
-          onUpdate: render
-        });
-
-        images[0].onload = render;
-
-        function render() {
-          const img = images[imageSeq.frame];
-          if (img && img.complete) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0, canvas.width, canvas.height);
-          }
-        }
-      }
+if (videoEl) {
+  if (videoEl.ended) {
+    playIntroOut();
+  } else {
+    videoEl.onended = playIntroOut;
+    videoEl.onerror = playIntroOut;
+    // Fallback if autoplay is blocked by the browser
+    const playPromise = videoEl.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => playIntroOut());
+    }
+  }
+} else {
+  playIntroOut();
+}
 
       // Content Segment Animations
       const segments = document.querySelectorAll('.segment');

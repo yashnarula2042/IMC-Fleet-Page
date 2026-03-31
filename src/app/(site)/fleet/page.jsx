@@ -23,12 +23,11 @@ export default function FleetPage() {
       <BrandFleetSection onOpenModal={openModal} />
       <Spotlight onOpenModal={() => openModal()} />
       <Occasions onOpenModal={() => openModal()} />
-      <Services onOpenModal={() => openModal()} />
 
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        selectedCar={selectedCar} 
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedCar={selectedCar}
       />
     </main>
   );
